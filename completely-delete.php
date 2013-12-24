@@ -1,0 +1,59 @@
+<?php
+/**
+ * Completely Delete.
+ *
+ * A plugin to let you completely delete all related objects of a post.
+ *
+ * @package   Completely_Delete
+ * @author    1fixdotio <1fixdotio@gmail.com>
+ * @license   GPL-2.0+
+ * @link      http://1fix.io/completely-delete
+ * @copyright 2013 1Fix
+ *
+ * @wordpress-plugin
+ * Plugin Name:       Completely Delete
+ * Plugin URI:        http://1fix.io/completely-delete
+ * Description:       A plugin to let you completely delete all related objects of a post.
+ * Version:           0.2
+ * Author:            1fixdotio
+ * Author URI:        http://1fix.io
+ * Text Domain:       completely-delete
+ * License:           GPL-2.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * Domain Path:       /languages
+ * GitHub Plugin URI: https://github.com/1fixdotio/completely-delete
+ */
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
+/*----------------------------------------------------------------------------*
+ * Public-Facing Functionality
+ *----------------------------------------------------------------------------*/
+
+require_once( plugin_dir_path( __FILE__ ) . 'public/class-completely-delete.php' );
+
+add_action( 'plugins_loaded', array( 'Completely_Delete', 'get_instance' ) );
+
+/*----------------------------------------------------------------------------*
+ * Dashboard and Administrative Functionality
+ *----------------------------------------------------------------------------*/
+
+/*
+ * If you want to include Ajax within the dashboard, change the following
+ * conditional to:
+ *
+ * if ( is_admin() ) {
+ *   ...
+ * }
+ *
+ * The code below is intended to to give the lightest footprint possible.
+ */
+if ( is_admin() ) {
+
+	require_once( plugin_dir_path( __FILE__ ) . 'admin/class-completely-delete-admin.php' );
+	add_action( 'plugins_loaded', array( 'Completely_Delete_Admin', 'get_instance' ) );
+
+}
