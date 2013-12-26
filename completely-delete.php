@@ -34,7 +34,6 @@ if ( ! defined( 'WPINC' ) ) {
  *----------------------------------------------------------------------------*/
 
 require_once( plugin_dir_path( __FILE__ ) . 'public/class-completely-delete.php' );
-
 add_action( 'plugins_loaded', array( 'Completely_Delete', 'get_instance' ) );
 
 /*----------------------------------------------------------------------------*
@@ -55,5 +54,4 @@ if ( is_admin() ) {
 
 	require_once( plugin_dir_path( __FILE__ ) . 'admin/class-completely-delete-admin.php' );
 	add_action( 'plugins_loaded', array( 'Completely_Delete_Admin', 'get_instance' ) );
-
 }

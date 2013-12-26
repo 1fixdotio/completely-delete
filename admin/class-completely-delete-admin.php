@@ -73,6 +73,7 @@ class Completely_Delete_Admin {
 		 */
 		add_action( 'post_submitbox_start', array( $this, 'add_delete_button' ) );
 		add_action( 'admin_action_completely_delete', array( $this, 'completely_delete' ) );
+		add_action( 'untrash_post', array( $this, 'untrash_post' ) );
 		// add_filter( '@TODO', array( $this, 'filter_method_name' ) );
 
 	}
@@ -198,7 +199,7 @@ class Completely_Delete_Admin {
 	?>
 	<div id="cd-action">
 		<a class="submitcd delete"
-			href="<?php echo add_query_arg( array( 'action' => 'completely_delete', 'post' => $_GET['post'] ), admin_url( 'admin.php' ) ); ?>"><?php _e( 'Completely Delete', 'completely-delete' ); ?>
+			href="<?php echo wp_nonce_url(add_query_arg( array( 'action' => 'completely_delete', 'post' => $_GET['post'] ), admin_url( 'admin.php' ) ) ); ?>"><?php _e( 'Completely Delete', 'completely-delete' ); ?>
 		</a>
 	</div>
 			<?php
@@ -207,8 +208,52 @@ class Completely_Delete_Admin {
 
 	public function completely_delete() {
 
-		echo 'Completely Delete ?';
-		exit();
+		if ( check_admin_referer() ) {
+			$post_id = $_REQUEST['post'];
+
+			add_action( 'wp_trash_post', array( $this, 'trash_post' ) );
+			wp_trash_post( $post_id );
+			// remove_action( 'wp_trash_post', array( $this, 'trash_post' ) );
+
+			$post_type = get_post_type( $post_id );
+			$path = ( 'post' == $post_type ) ? '/edit.php' : '/edit.php?post_type=' . $post_type;
+			wp_redirect( admin_url( $path ) );
+		}
+	}
+
+	public function trash_post( $post_id ) {
+
+		global $wpdb;
+		$post = get_post( $post_id );
+
+		if ( is_post_type_hierarchical( $post->post_type ) ) {
+			// Point children of this page to its parent, also clean the cache of affected children
+			$children_query = $wpdb->prepare( "SELECT ID, post_status FROM $wpdb->posts WHERE post_parent = %d AND post_type != 'revision'", $post_id );
+			$children = $wpdb->get_results( $children_query );
+
+			foreach ( $children as $child ) {
+				if ( 'trash' != $child->post_status )
+					wp_trash_post( $child->ID );
+			}
+		}
+	}
+
+	public function untrash_post( $post_id ) {
+
+		global $wpdb;
+		$post = get_post( $post_id );
+
+		if ( is_post_type_hierarchical( $post->post_type ) ) {
+
+			// Point children of this page to its parent, also clean the cache of affected children
+			$children_query = $wpdb->prepare( "SELECT ID, post_status FROM $wpdb->posts WHERE post_parent = %d AND post_type != 'revision'", $post_id );
+			$children = $wpdb->get_results( $children_query );
+
+			foreach ( $children as $child ) {
+				if ( 'trash' == $child->post_status )
+					wp_untrash_post( $child->ID );
+			}
+		}
 	}
 
 	/**
