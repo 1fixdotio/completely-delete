@@ -67,14 +67,13 @@ class Completely_Delete_Admin {
 
 		/*
 		 * Define custom functionality.
-		 *
-		 * Read more about actions and filters:
-		 * http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		 */
 		add_action( 'post_submitbox_start', array( $this, 'add_delete_button' ) );
 		add_action( 'admin_action_completely_delete', array( $this, 'completely_delete' ) );
 		add_action( 'untrash_post', array( $this, 'untrash_post' ) );
-		// add_filter( '@TODO', array( $this, 'filter_method_name' ) );
+		add_action( 'before_delete_post', array( $this, 'before_delete_post' ) );
+		add_filter( 'post_row_actions', array( $this, 'row_actions' ), 10, 2 );
+		add_filter( 'page_row_actions', array( $this, 'row_actions' ), 10, 2 );
 
 	}
 
@@ -187,9 +186,24 @@ class Completely_Delete_Admin {
 	}
 
 	/**
-	 * Create completely delete link / button
+	 * Build completely delete action url.
+	 *
+	 * @since 0.3
+	 *
+	 * @param  int    $post_id Post ID
+	 * @return string    Action url
+	 */
+	public function get_action_url( $post_id ) {
+
+		return wp_nonce_url( add_query_arg( array( 'action' => 'completely_delete', 'post' => $post_id ), admin_url( 'admin.php' ) ) );
+	}
+
+	/**
+	 * Create completely delete link / button.
 	 *
 	 * @since    0.2
+	 *
+	 * @return   HTML
 	 */
 	public function add_delete_button() {
 
@@ -199,13 +213,20 @@ class Completely_Delete_Admin {
 	?>
 	<div id="cd-action">
 		<a class="submitcd delete"
-			href="<?php echo wp_nonce_url(add_query_arg( array( 'action' => 'completely_delete', 'post' => $_GET['post'] ), admin_url( 'admin.php' ) ) ); ?>"><?php _e( 'Completely Delete', 'completely-delete' ); ?>
+			href="<?php echo $this->get_action_url( $_GET['post'] ); ?>"><?php _e( 'Completely Delete', 'completely-delete' ); ?>
 		</a>
 	</div>
 			<?php
 		}
 	}
 
+	/**
+	 * Completely delete admin action.
+	 *
+	 * @since  0.2
+	 *
+	 * @return voide
+	 */
 	public function completely_delete() {
 
 		if ( check_admin_referer() ) {
@@ -221,12 +242,20 @@ class Completely_Delete_Admin {
 		}
 	}
 
+	/**
+	 * Trash all children posts.
+	 *
+	 * @since  0.2
+	 *
+	 * @param  int $post_id Post ID
+	 * @return void
+	 */
 	public function trash_post( $post_id ) {
 
 		global $wpdb;
-		$post = get_post( $post_id );
+		//$post = get_post( $post_id );
 
-		if ( is_post_type_hierarchical( $post->post_type ) ) {
+		// if ( is_post_type_hierarchical( $post->post_type ) ) {
 			// Point children of this page to its parent, also clean the cache of affected children
 			$children_query = $wpdb->prepare( "SELECT ID, post_status FROM $wpdb->posts WHERE post_parent = %d AND post_type != 'revision'", $post_id );
 			$children = $wpdb->get_results( $children_query );
@@ -235,15 +264,44 @@ class Completely_Delete_Admin {
 				if ( 'trash' != $child->post_status )
 					wp_trash_post( $child->ID );
 			}
+		// }
+	}
+
+	/**
+	 * Delete attachments before deleting a post.
+	 *
+	 * @since 0.3
+	 *
+	 * @param  int $post_id Post ID
+	 * @return void
+	 */
+	public function before_delete_post( $post_id ) {
+
+		global $wpdb;
+
+		$children_query = $wpdb->prepare( "SELECT ID, post_status FROM $wpdb->posts WHERE post_parent = %d", $post_id );
+		$children = $wpdb->get_results( $children_query );
+
+		foreach ( $children as $child ) {
+			if ( 'trash' == $child->post_status )
+				wp_delete_post( $child->ID, true );
 		}
 	}
 
+	/**
+	 * Untrash trashed posts.
+	 *
+	 * @since  0.2
+	 *
+	 * @param  int $post_id Post ID
+	 * @return void
+	 */
 	public function untrash_post( $post_id ) {
 
 		global $wpdb;
-		$post = get_post( $post_id );
+		// $post = get_post( $post_id );
 
-		if ( is_post_type_hierarchical( $post->post_type ) ) {
+		// if ( is_post_type_hierarchical( $post->post_type ) ) {
 
 			// Point children of this page to its parent, also clean the cache of affected children
 			$children_query = $wpdb->prepare( "SELECT ID, post_status FROM $wpdb->posts WHERE post_parent = %d AND post_type != 'revision'", $post_id );
@@ -253,20 +311,21 @@ class Completely_Delete_Admin {
 				if ( 'trash' == $child->post_status )
 					wp_untrash_post( $child->ID );
 			}
-		}
+		// }
 	}
 
 	/**
-	 * NOTE:     Filters are points of execution in which WordPress modifies data
-	 *           before saving it or sending it to the browser.
+	 * Add completely delete link into post row actions.
 	 *
-	 *           Filters: http://codex.wordpress.org/Plugin_API#Filters
-	 *           Reference:  http://codex.wordpress.org/Plugin_API/Filter_Reference
-	 *
-	 * @since    0.1
+	 * @since    0.3
 	 */
-	public function filter_method_name() {
-		// @TODO: Define your filter hook callback here
+	public function row_actions( $actions, $post ) {
+
+		if ( 'trash' != $post->post_status ) {
+			$actions['completely-delete'] = '<a class="submitcd delete" href="' . $this->get_action_url( $post->ID ) . '">' . __( 'Completely Delete', 'completely-delete' ) . '</a>';
+		}
+
+		return $actions;
 	}
 
 }
