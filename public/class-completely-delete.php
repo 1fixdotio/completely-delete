@@ -28,7 +28,7 @@ class Completely_Delete {
 	 *
 	 * @var     string
 	 */
-	const VERSION = '0.3';
+	const VERSION = '0.4';
 
 	/**
 	 * Unique identifier for your plugin.
@@ -52,6 +52,8 @@ class Completely_Delete {
 	 * @var      object
 	 */
 	protected static $instance = null;
+
+	protected $options = null;
 
 	/**
 	 * Initialize the plugin by setting localization and loading public scripts
@@ -129,6 +131,13 @@ class Completely_Delete {
 
 		load_textdomain( $domain, trailingslashit( WP_LANG_DIR ) . $domain . '/' . $domain . '-' . $locale . '.mo' );
 
+	}
+
+	public function get_options() {
+
+		$this->options = get_option( $this->plugin_slug );
+
+		return $this->options;
 	}
 
 }

@@ -59,8 +59,11 @@ class Completely_Delete_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 
 		// Add the options page and menu item.
-		add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
+		require_once( plugin_dir_path( __FILE__ ) . 'includes/wordpress-settings-api-class/class.settings-api.php' );
+		require_once( plugin_dir_path( __FILE__ ) . 'includes/settings.php' );
 
+		// Add the options page and menu item.
+		add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
 		// Add an action link pointing to the options page.
 		$plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . $this->plugin_slug . '.php' );
 		add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'add_action_links' ) );
@@ -71,7 +74,12 @@ class Completely_Delete_Admin {
 		add_action( 'post_submitbox_start', array( $this, 'add_delete_button' ) );
 		add_action( 'admin_action_completely_delete', array( $this, 'completely_delete' ) );
 		add_action( 'untrash_post', array( $this, 'untrash_post' ) );
-		add_action( 'before_delete_post', array( $this, 'before_delete_post' ) );
+
+		$options = $plugin->get_options();
+		if ( 'on' == $options['delete_attachments'] ) {
+			add_action( 'before_delete_post', array( $this, 'before_delete_post' ) );
+		}
+
 		add_filter( 'post_row_actions', array( $this, 'row_actions' ), 10, 2 );
 		add_filter( 'page_row_actions', array( $this, 'row_actions' ), 10, 2 );
 
@@ -213,7 +221,7 @@ class Completely_Delete_Admin {
 	?>
 	<div id="cd-action">
 		<a class="submitcd delete"
-			href="<?php echo $this->get_action_url( $_GET['post'] ); ?>"><?php _e( 'Completely Delete', 'completely-delete' ); ?>
+			href="<?php echo $this->get_action_url( $_GET['post'] ); ?>"><?php _e( 'Completely Delete', $this->plugin_slug ); ?>
 		</a>
 	</div>
 			<?php
@@ -322,7 +330,7 @@ class Completely_Delete_Admin {
 	public function row_actions( $actions, $post ) {
 
 		if ( 'trash' != $post->post_status ) {
-			$actions['completely-delete'] = '<a class="submitcd delete" href="' . $this->get_action_url( $post->ID ) . '">' . __( 'Completely Delete', 'completely-delete' ) . '</a>';
+			$actions[$this->plugin_slug] = '<a class="submitcd delete" href="' . $this->get_action_url( $post->ID ) . '">' . __( 'Completely Delete', $this->plugin_slug ) . '</a>';
 		}
 
 		return $actions;
