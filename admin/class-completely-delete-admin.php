@@ -39,6 +39,8 @@ class Completely_Delete_Admin {
 	 */
 	protected $plugin_screen_hook_suffix = null;
 
+	protected $options = array();
+
 	/**
 	 * Initialize the plugin by loading admin scripts & styles and adding a
 	 * settings page and menu.
@@ -75,7 +77,7 @@ class Completely_Delete_Admin {
 		add_action( 'admin_action_completely_delete', array( $this, 'completely_delete' ) );
 		add_action( 'untrash_post', array( $this, 'untrash_post' ) );
 
-		$options = $plugin->get_options();
+		$options = $this->get_options();
 		if ( 'on' == $options['delete_attachments'] ) {
 			add_action( 'before_delete_post', array( $this, 'before_delete_post' ) );
 		}
@@ -241,6 +243,12 @@ class Completely_Delete_Admin {
 			$post_id = $_REQUEST['post'];
 
 			add_action( 'wp_trash_post', array( $this, 'trash_post' ) );
+			///////////////////////////////////////////////////////////////////////
+			// Don't create revision when programically trash / delete posts, //
+			// revisions will fail the untrash process                        //
+			///////////////////////////////////////////////////////////////////////
+			remove_action( 'post_updated', 'wp_save_post_revision' );
+
 			wp_trash_post( $post_id );
 			// remove_action( 'wp_trash_post', array( $this, 'trash_post' ) );
 
@@ -261,18 +269,20 @@ class Completely_Delete_Admin {
 	public function trash_post( $post_id ) {
 
 		global $wpdb;
-		//$post = get_post( $post_id );
+		remove_action( 'post_updated', 'wp_save_post_revision' );
 
-		// if ( is_post_type_hierarchical( $post->post_type ) ) {
-			// Point children of this page to its parent, also clean the cache of affected children
-			$children_query = $wpdb->prepare( "SELECT ID, post_status FROM $wpdb->posts WHERE post_parent = %d AND post_type != 'revision'", $post_id );
-			$children = $wpdb->get_results( $children_query );
+		// Point children of this page to its parent, also clean the cache of affected children
+		$options = $this->get_options();
+		// var_dump($where);
+		$sql = "SELECT ID, post_status FROM $wpdb->posts WHERE post_parent = %d AND post_type != 'revision'";
+		$sql .= ( 'off' == $options['trash_attachments'] ) ? " AND post_type != 'attachment'" : "";
+		$children_query = $wpdb->prepare( $sql, $post_id );
+		$children = $wpdb->get_results( $children_query );
 
-			foreach ( $children as $child ) {
-				if ( 'trash' != $child->post_status )
-					wp_trash_post( $child->ID );
-			}
-		// }
+		foreach ( $children as $child ) {
+			if ( 'trash' != $child->post_status )
+				wp_trash_post( $child->ID );
+		}
 	}
 
 	/**
@@ -307,19 +317,20 @@ class Completely_Delete_Admin {
 	public function untrash_post( $post_id ) {
 
 		global $wpdb;
-		// $post = get_post( $post_id );
+		remove_action( 'post_updated', 'wp_save_post_revision' );
 
-		// if ( is_post_type_hierarchical( $post->post_type ) ) {
+		// Point children of this page to its parent, also clean the cache of affected children
+		$options = $this->get_options();
 
-			// Point children of this page to its parent, also clean the cache of affected children
-			$children_query = $wpdb->prepare( "SELECT ID, post_status FROM $wpdb->posts WHERE post_parent = %d AND post_type != 'revision'", $post_id );
-			$children = $wpdb->get_results( $children_query );
+		$sql = "SELECT ID, post_status FROM $wpdb->posts WHERE post_parent = %d AND post_type != 'revision'";
+		$sql .= ( 'off' == $options['trash_attachments'] ) ? " AND post_type != 'attachment'" : "";
+		$children_query = $wpdb->prepare( $sql, $post_id );
+		$children = $wpdb->get_results( $children_query );
 
-			foreach ( $children as $child ) {
-				if ( 'trash' == $child->post_status )
-					wp_untrash_post( $child->ID );
-			}
-		// }
+		foreach ( $children as $child ) {
+			if ( 'trash' == $child->post_status )
+				wp_untrash_post( $child->ID );
+		}
 	}
 
 	/**
@@ -334,6 +345,26 @@ class Completely_Delete_Admin {
 		}
 
 		return $actions;
+	}
+
+	/**
+	 * Get plugin options
+	 *
+	 * @since 0.5
+	 *
+	 * @return array|string The option settings
+	 */
+	public function get_options() {
+
+		$this->options = get_option( $this->plugin_slug );
+
+		if ( empty( $this->options ) )
+			$this->options = array(
+				'trash_attachments' => 'off',
+				'delete_attachments' => 'off'
+				);
+
+		return $this->options;
 	}
 
 }

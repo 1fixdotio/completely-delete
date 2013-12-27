@@ -43,9 +43,15 @@ if ( !class_exists( 'Completely_Delete_Settings' ) ):
 		$settings_fields = array(
 			$this->plugin_slug => array(
 				array(
+					'name' => 'trash_attachments',
+					'label' => __( 'Trash Post Attachments', $this->plugin_slug ),
+					'desc' => __( 'Trash all attachments when trashing a post.', $this->plugin_slug ),
+					'type' => 'checkbox'
+				),
+				array(
 					'name' => 'delete_attachments',
 					'label' => __( 'Delete Post Attachments', $this->plugin_slug ),
-					'desc' => __( 'Delete all attachments when deleting a trashed post (any post type).', $this->plugin_slug ),
+					'desc' => __( 'Delete all trashed attachments when deleting a trashed post.', $this->plugin_slug ),
 					'type' => 'checkbox'
 				)
 			)
