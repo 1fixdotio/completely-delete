@@ -28,7 +28,7 @@ class Completely_Delete {
 	 *
 	 * @var     string
 	 */
-	const VERSION = '0.5';
+	const VERSION = '0.5.5';
 
 	/**
 	 * Unique identifier for your plugin.
