@@ -61,7 +61,7 @@ class Completely_Delete_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 
 		// Add the options page and menu item.
-		require_once( plugin_dir_path( __FILE__ ) . 'includes/wordpress-settings-api-class/class.settings-api.php' );
+		require_once( plugin_dir_path( __FILE__ ) . 'includes/class.settings-api.php' );
 		require_once( plugin_dir_path( __FILE__ ) . 'includes/settings.php' );
 
 		// Add the options page and menu item.
