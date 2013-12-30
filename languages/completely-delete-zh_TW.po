@@ -1,27 +1,26 @@
-# Copyright (C) 2013 TODO
-# This file is distributed under the same license as the TODO package.
 msgid ""
 msgstr ""
 "Project-Id-Version: Completely Delete\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/plugins/plugin-name\n"
-"POT-Creation-Date: 2013-12-30 12:44+0800\n"
-"PO-Revision-Date: 2013-12-30 12:44+0800\n"
+"POT-Creation-Date: 2013-12-30 12:41+0800\n"
+"PO-Revision-Date: 2013-12-30 13:53+0800\n"
 "Last-Translator: Yoren Chang <yorenchang@gmail.com>\n"
 "Language-Team: 1Fix Dot IO <1fixdotio@gmail.com>\n"
-"Language: en_US\n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.6.3\n"
-"X-Poedit-KeywordsList: __;_e;_n;_x;esc_html_e;esc_html__;esc_attr_e;"
-"esc_attr__;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_x:1,2c;_n:1,2\n"
-"X-Poedit-Basepath: ../\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: admin/class-completely-delete-admin.php:163
 msgid "Completely Delete Settings"
-msgstr ""
+msgstr "Completely Delete 設定"
 
 #: admin/class-completely-delete-admin.php:164
 #: admin/class-completely-delete-admin.php:226
@@ -31,20 +30,20 @@ msgstr ""
 
 #: admin/class-completely-delete-admin.php:191 admin/includes/settings.php:31
 msgid "Settings"
-msgstr ""
+msgstr "設定"
 
 #: admin/includes/settings.php:47
 msgid "Trash Post Attachments"
-msgstr ""
+msgstr "回收媒體檔案"
 
 #: admin/includes/settings.php:48
 msgid "Trash all attachments when trashing a post."
-msgstr ""
+msgstr "回收文章時，一併將其內全部的媒體檔案移至回收桶"
 
 #: admin/includes/settings.php:53
 msgid "Delete Post Attachments"
-msgstr ""
+msgstr "刪除媒體檔案"
 
 #: admin/includes/settings.php:54
 msgid "Delete all trashed attachments when deleting a trashed post."
-msgstr ""
+msgstr "永久刪除文章時，一併刪除其內全部的媒體檔案"

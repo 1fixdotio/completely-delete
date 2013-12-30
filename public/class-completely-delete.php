@@ -28,7 +28,7 @@ class Completely_Delete {
 	 *
 	 * @var     string
 	 */
-	const VERSION = '0.5.6';
+	const VERSION = '0.6';
 
 	/**
 	 * Unique identifier for your plugin.
@@ -127,7 +127,7 @@ class Completely_Delete {
 		$domain = $this->plugin_slug;
 		$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
 
-		load_textdomain( $domain, trailingslashit( WP_LANG_DIR ) . $domain . '/' . $domain . '-' . $locale . '.mo' );
+		load_textdomain( $domain, trailingslashit( WP_PLUGIN_DIR ) . $domain . '/languages/' . $domain . '-' . $locale . '.mo' );
 
 	}
 }
