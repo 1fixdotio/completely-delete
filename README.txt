@@ -1,15 +1,15 @@
 === Completely Delete ===
 
-Contributors:
+Contributors: 1fixdotio, yoren
 Donate link: http://1fix.io/
 Tags: posts, pages, attachemnts
 Requires at least: 3.5
 Tested up to: 3.8
-Stable tag: 0.6
+Stable tag: 0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A plugin to let you completely delete all related objects of a post.
+A plugin to let you completely delete all child objects of a post.
 
 == Description ==
 
@@ -54,6 +54,10 @@ This plugin is made for:
 3. A settings page for this plugin
 
 == Changelog ==
+
+= 0.7 =
+* Display an admin notice when plugin activated.
+* Add uninstall functions.
 
 = 0.6 =
 * Remove assets folder, which should not be included.

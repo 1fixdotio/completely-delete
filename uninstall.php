@@ -14,4 +14,11 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-// @TODO: Define uninstall functionality here
+require_once( plugin_dir_path( __FILE__ ) . 'public/class-completely-delete.php' );
+
+$plugin = Completely_Delete::get_instance();
+delete_option( $plugin->get_plugin_slug() );
+delete_option( 'cd-display-activation-message' );
+/**
+ * @todo Delete options in whole network
+ */

@@ -28,7 +28,7 @@ class Completely_Delete {
 	 *
 	 * @var     string
 	 */
-	const VERSION = '0.6';
+	const VERSION = '0.7';
 
 	/**
 	 * Unique identifier for your plugin.
@@ -63,6 +63,9 @@ class Completely_Delete {
 
 		// Load plugin text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
+
+		// Display the admin notification
+		add_action( 'admin_notices', array( $this, 'plugin_activation' ) ) ;
 	}
 
 	/**
@@ -94,6 +97,64 @@ class Completely_Delete {
 		return self::$instance;
 	}
 
+	public function plugin_activation() {
+
+		$screen = get_current_screen();
+
+		if( false == get_option( 'cd-display-activation-message' ) && 'plugins' == $screen->id ) {
+			$plugin = self::get_instance();
+
+			add_option( 'cd-display-activation-message', true );
+
+			$html = '<div class="updated">';
+				$html .= '<p>';
+					$html .= sprintf( __( 'If you\'d like to trash / delete a post with all its attachments, please update the plugin <strong><a href="%s">Settings</a></strong>.', $plugin->get_plugin_slug() ), admin_url( 'options-general.php?page=' . $plugin->get_plugin_slug() ) );
+				$html .= '</p>';
+			$html .= '</div><!-- /.updated -->';
+
+			echo $html;
+
+		}
+	}
+
+	/**
+	 * Fired when the plugin is deactivated.
+	 *
+	 * @since    0.7
+	 *
+	 * @param    boolean    $network_wide    True if WPMU superadmin uses
+	 *                                       "Network Deactivate" action, false if
+	 *                                       WPMU is disabled or plugin is
+	 *                                       deactivated on an individual blog.
+	 */
+	public static function deactivate( $network_wide ) {
+
+		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
+
+			if ( $network_wide ) {
+
+				// Get all blog ids
+				$blog_ids = self::get_blog_ids();
+
+				foreach ( $blog_ids as $blog_id ) {
+
+					switch_to_blog( $blog_id );
+					self::single_deactivate();
+
+				}
+
+				restore_current_blog();
+
+			} else {
+				self::single_deactivate();
+			}
+
+		} else {
+			self::single_deactivate();
+		}
+
+	}
+
 	/**
 	 * Get all blog ids of blogs in the current network that are:
 	 * - not archived
@@ -114,6 +175,28 @@ class Completely_Delete {
 			AND deleted = '0'";
 
 		return $wpdb->get_col( $sql );
+
+	}
+
+	/**
+	 * Fired for each blog when the plugin is deactivated.
+	 *
+	 * @since    0.7
+	 */
+	private static function single_deactivate() {
+
+		if( false == delete_option( 'cd-display-activation-message' ) ) {
+			$plugin = self::get_instance();
+
+			$html = '<div class="error">';
+				$html .= '<p>';
+					$html .= __( 'There was a problem deactivating the Completely Delete plugin. Please try again.', $plugin->get_plugin_slug() );
+				$html .= '</p>';
+			$html .= '</div><!-- /.updated -->';
+
+			echo $html;
+
+		}
 
 	}
 
