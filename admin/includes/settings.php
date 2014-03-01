@@ -62,7 +62,7 @@ class Completely_Delete_Settings {
 	 */
 	public function admin_init() {
 
-		if( false == get_option( $this->plugin_slug ) ) {
+		if ( false == get_option( $this->plugin_slug ) ) {
 			add_option( $this->plugin_slug, $this->default_settings() );
 		} // end if
 
@@ -98,6 +98,8 @@ class Completely_Delete_Settings {
 
 	/**
 	 * Provides default values for the plugin settings.
+	 *
+	 * @return  array Default settings
 	 */
 	public function default_settings() {
 

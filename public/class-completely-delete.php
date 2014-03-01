@@ -65,7 +65,7 @@ class Completely_Delete {
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
 		// Display the admin notification
-		add_action( 'admin_notices', array( $this, 'admin_notice_activation' ) ) ;
+		add_action( 'admin_notices', array( $this, 'admin_notice_activation' ) );
 	}
 
 	/**

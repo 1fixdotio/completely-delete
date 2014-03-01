@@ -232,12 +232,11 @@ class Completely_Delete_Admin {
 
 		if ( isset( $_GET['post'] ) ) {
 	?>
-	<div id="cd-action">
-		<a class="submitcd delete"
-			href="<?php echo $this->get_action_url( $_GET['post'] ); ?>"><?php _e( 'Completely Delete', $this->plugin_slug ); ?>
-		</a>
-	</div>
-			<?php
+		<div id="cd-action">
+			<a class="submitcd delete" href="<?php echo $this->get_action_url( $_GET['post'] ); ?>"><?php _e( 'Completely Delete', $this->plugin_slug ); ?>
+			</a>
+		</div>
+	<?php
 		}
 	}
 
@@ -293,9 +292,9 @@ class Completely_Delete_Admin {
 
 		// Point children of this page to its parent, also clean the cache of affected children
 		$options = $this->get_options();
-		// var_dump($where);
+
 		$sql = "SELECT ID, post_status FROM $wpdb->posts WHERE post_parent = %d AND post_type != 'revision'";
-		$sql .= ( 'off' == $options['trash_attachments'] ) ? " AND post_type != 'attachment'" : "";
+		$sql .= ( 'off' == $options['trash_attachments'] ) ? " AND post_type != 'attachment'" : '';
 		$children_query = $wpdb->prepare( $sql, $post_id );
 		$children = $wpdb->get_results( $children_query );
 
@@ -359,7 +358,7 @@ class Completely_Delete_Admin {
 		$options = $this->get_options();
 
 		$sql = "SELECT ID, post_status FROM $wpdb->posts WHERE post_parent = %d AND post_type != 'revision'";
-		$sql .= ( 'off' == $options['trash_attachments'] ) ? " AND post_type != 'attachment'" : "";
+		$sql .= ( 'off' == $options['trash_attachments'] ) ? " AND post_type != 'attachment'" : '';
 		$children_query = $wpdb->prepare( $sql, $post_id );
 		$children = $wpdb->get_results( $children_query );
 
@@ -373,6 +372,8 @@ class Completely_Delete_Admin {
 	 * Add completely delete link into post row actions.
 	 *
 	 * @since    0.3
+	 *
+	 * @return array Actions
 	 */
 	public function row_actions( $actions, $post ) {
 
@@ -403,14 +404,20 @@ class Completely_Delete_Admin {
 		return $this->options;
 	}
 
+	/**
+	 * Get menu items by post_id
+	 *
+	 * @param  int $post_id Post ID
+	 * @return boolean|array An array of post id, false if the result is empty
+	 */
 	public function get_menu_items_by_post_id( $post_id ) {
 
-	        global $wpdb;
-	        $results = $wpdb->get_results( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = %s AND meta_value = %d", '_menu_item_object_id', $post_id ) );
-	        if ( ! empty( $results ) )
-	                return $results;
+		global $wpdb;
+		$results = $wpdb->get_results( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = %s AND meta_value = %d", '_menu_item_object_id', $post_id ) );
+		if ( ! empty( $results ) )
+			return $results;
 
-	        return false;
+		return false;
 	}
 
 }
