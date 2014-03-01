@@ -22,6 +22,18 @@
 class Completely_Delete_Admin {
 
 	/**
+	 * Unique identifier for your plugin.
+	 *
+	 *
+	 * Call $plugin_slug from public plugin class later.
+	 *
+	 * @since    0.8.0
+	 *
+	 * @var      string
+	 */
+	protected $plugin_slug = null;
+
+	/**
 	 * Instance of this class.
 	 *
 	 * @since    0.1

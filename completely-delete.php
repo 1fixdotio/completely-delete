@@ -39,7 +39,7 @@ require_once( plugin_dir_path( __FILE__ ) . 'public/class-completely-delete.php'
  * Register hooks that are fired when the plugin is activated or deactivated.
  * When the plugin is deleted, the uninstall.php file is loaded.
  */
-// register_activation_hook( __FILE__, array( 'Completely_Delete', 'activate' ) );
+register_activation_hook( __FILE__, array( 'Completely_Delete', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'Completely_Delete', 'deactivate' ) );
 
 add_action( 'plugins_loaded', array( 'Completely_Delete', 'get_instance' ) );
