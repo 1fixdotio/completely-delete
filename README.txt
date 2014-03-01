@@ -4,8 +4,8 @@ Contributors: 1fixdotio, yoren
 Donate link: http://1fix.io/
 Tags: posts, pages, attachemnts
 Requires at least: 3.5
-Tested up to: 3.8
-Stable tag: 0.7
+Tested up to: 3.8.1
+Stable tag: 0.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,12 @@ This plugin is made for:
 3. A settings page for this plugin
 
 == Changelog ==
+
+= 0.8.0 =
+* Use 3-digit version number.
+* Enable the "trash / delete attachments with a post" options by default.
+* Remove weDevs Settings API wrapper class. Use WordPress Settings API directly.
+* Debug and improve performance via Scrutinizer.
 
 = 0.7 =
 * Display an admin notice when plugin activated.

@@ -28,7 +28,7 @@ class Completely_Delete {
 	 *
 	 * @var     string
 	 */
-	const VERSION = '0.7';
+	const VERSION = '0.8.0';
 
 	/**
 	 * Unique identifier for your plugin.
@@ -71,9 +71,9 @@ class Completely_Delete {
 	/**
 	 * Return the plugin slug.
 	 *
-	 * @since    0.1
+	 * @since 0.1
 	 *
-	 * @return    Plugin slug variable.
+	 * @return string Plugin slug variable.
 	 */
 	public function get_plugin_slug() {
 
@@ -153,7 +153,7 @@ class Completely_Delete {
 				// Get all blog ids
 				$blog_ids = self::get_blog_ids();
 
-				foreach ( ( array ) $blog_ids as $blog_id ) {
+				foreach ( (array) $blog_ids as $blog_id ) {
 
 					switch_to_blog( $blog_id );
 					self::single_deactivate();
