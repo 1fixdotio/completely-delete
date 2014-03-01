@@ -297,7 +297,7 @@ class Completely_Delete_Admin {
 		$options = $this->get_options();
 
 		$sql = "SELECT ID, post_status FROM $wpdb->posts WHERE post_parent = %d AND post_type != 'revision'";
-		$sql .= ( 'off' == $options['trash_attachments'] ) ? " AND post_type != 'attachment'" : '';
+		$sql .= ( 'off' == $options['trash_attachments'] || ! isset( $options['trash_attachments'] ) ) ? " AND post_type != 'attachment'" : '';
 		$children_query = $wpdb->prepare( $sql, $post_id );
 		$children = $wpdb->get_results( $children_query );
 
@@ -361,7 +361,7 @@ class Completely_Delete_Admin {
 		$options = $this->get_options();
 
 		$sql = "SELECT ID, post_status FROM $wpdb->posts WHERE post_parent = %d AND post_type != 'revision'";
-		$sql .= ( 'off' == $options['trash_attachments'] ) ? " AND post_type != 'attachment'" : '';
+		$sql .= ( 'off' == $options['trash_attachments'] || ! isset( $options['trash_attachments'] ) ) ? " AND post_type != 'attachment'" : '';
 		$children_query = $wpdb->prepare( $sql, $post_id );
 		$children = $wpdb->get_results( $children_query );
 
