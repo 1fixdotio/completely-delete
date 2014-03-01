@@ -61,7 +61,6 @@ class Completely_Delete_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 
 		// Add the options page and menu item.
-		require_once( plugin_dir_path( __FILE__ ) . 'includes/class.settings-api.php' );
 		require_once( plugin_dir_path( __FILE__ ) . 'includes/settings.php' );
 
 		// Add the options page and menu item.
@@ -78,7 +77,7 @@ class Completely_Delete_Admin {
 		add_action( 'untrash_post', array( $this, 'untrash_post' ) );
 
 		$options = $this->get_options();
-		if ( 'on' == $options['delete_attachments'] ) {
+		if ( isset( $options['delete_attachments'] ) && 'on' == $options['delete_attachments'] ) {
 			add_action( 'before_delete_post', array( $this, 'before_delete_post' ) );
 		}
 

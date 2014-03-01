@@ -13,16 +13,23 @@
  */
 ?>
 
+<!-- Create a header in the default WordPress 'wrap' container -->
 <div class="wrap">
 
+	<div id="icon-themes" class="icon32"></div>
 	<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
+	<?php // settings_errors(); ?>
 
-	<?php
+	<form method="post" action="options.php">
+		<?php
+			$plugin = Completely_Delete::get_instance();
 
-	global $settings;
+			settings_fields( $plugin->get_plugin_slug() );
+			do_settings_sections( $plugin->get_plugin_slug() );
 
-	// $settings->settings_api->show_navigation();
-	$settings->settings_api->show_forms();
-	?>
+			submit_button();
 
-</div>
+		?>
+	</form>
+
+</div><!-- /.wrap -->
