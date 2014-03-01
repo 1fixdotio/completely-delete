@@ -99,13 +99,13 @@ class Completely_Delete_Settings {
 	/**
 	 * Provides default values for the plugin settings.
 	 *
-	 * @return  array Default settings
+	 * @return  array<string> Default settings
 	 */
 	public function default_settings() {
 
 		$defaults = array(
 			'trash_attachments' => 'on',
-			'delete_attachments' => 'on'
+			'delete_attachments' => 'on',
 		);
 
 		return apply_filters( 'default_settings', $defaults );
@@ -115,9 +115,9 @@ class Completely_Delete_Settings {
 	public function trash_attachments_callback() {
 
 		$options = get_option( $this->plugin_slug );
-		$option = isset( $options['trash_attachments'] ) ? $options['trash_attachments'] : '';
+		$option  = isset( $options['trash_attachments'] ) ? $options['trash_attachments'] : '';
 
-		$html = '<input type="checkbox" id="trash_attachments" name="' . $this->plugin_slug . '[trash_attachments]" value="on"' . checked( 'on', $option, false ) . '/>';
+		$html  = '<input type="checkbox" id="trash_attachments" name="' . $this->plugin_slug . '[trash_attachments]" value="on"' . checked( 'on', $option, false ) . '/>';
 		$html .= '<label for="trash_attachments">' . __( 'Trash all attachments when trashing a post.', $this->plugin_slug ) . '</label>';
 
 		echo $html;
@@ -127,9 +127,9 @@ class Completely_Delete_Settings {
 	public function delete_attachments_callback() {
 
 		$options = get_option( $this->plugin_slug );
-		$option = ( isset( $options['delete_attachments'] ) ) ? $options['delete_attachments'] : '';
+		$option  = ( isset( $options['delete_attachments'] ) ) ? $options['delete_attachments'] : '';
 
-		$html = '<input type="checkbox" id="delete_attachments" name="' . $this->plugin_slug . '[delete_attachments]" value="on"' . checked( 'on', $option, false ) . '/>';
+		$html  = '<input type="checkbox" id="delete_attachments" name="' . $this->plugin_slug . '[delete_attachments]" value="on"' . checked( 'on', $option, false ) . '/>';
 		$html .= '<label for="delete_attachments">' . __( 'Delete all trashed attachments when deleting a trashed post.', $this->plugin_slug ) . '</label>';
 
 		echo $html;

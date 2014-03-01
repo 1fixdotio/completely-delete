@@ -194,12 +194,15 @@ class Completely_Delete_Admin {
 	 * Add settings action link to the plugins page.
 	 *
 	 * @since    0.1
+	 *
+	 * @param array<string> $links Action links
+	 * @return  array<string> Action links
 	 */
 	public function add_action_links( $links ) {
 
 		return array_merge(
 			array(
-				'settings' => '<a href="' . admin_url( 'options-general.php?page=' . $this->plugin_slug ) . '">' . __( 'Settings' ) . '</a>'
+				'settings' => '<a href="' . admin_url( 'options-general.php?page=' . $this->plugin_slug ) . '">' . __( 'Settings' ) . '</a>',
 			),
 			$links
 		);
@@ -224,19 +227,19 @@ class Completely_Delete_Admin {
 	 *
 	 * @since    0.2
 	 *
-	 * @return   HTML
+	 * @return   string The HTML of delete button
 	 */
 	public function add_delete_button() {
 
 		global $post;
 
 		if ( isset( $_GET['post'] ) ) {
-	?>
-		<div id="cd-action">
-			<a class="submitcd delete" href="<?php echo $this->get_action_url( $_GET['post'] ); ?>"><?php _e( 'Completely Delete', $this->plugin_slug ); ?>
-			</a>
-		</div>
-	<?php
+			?>
+				<div id="cd-action">
+					<a class="submitcd delete" href="<?php echo $this->get_action_url( $_GET['post'] ); ?>"><?php _e( 'Completely Delete', $this->plugin_slug ); ?>
+					</a>
+				</div>
+			<?php
 		}
 	}
 
@@ -245,7 +248,7 @@ class Completely_Delete_Admin {
 	 *
 	 * @since  0.2
 	 *
-	 * @return voide
+	 * @return void
 	 */
 	public function completely_delete() {
 
@@ -373,7 +376,7 @@ class Completely_Delete_Admin {
 	 *
 	 * @since    0.3
 	 *
-	 * @return array Actions
+	 * @return array<string> Actions
 	 */
 	public function row_actions( $actions, $post ) {
 
@@ -389,17 +392,18 @@ class Completely_Delete_Admin {
 	 *
 	 * @since 0.5
 	 *
-	 * @return array|string The option settings
+	 * @return array<string> The setting options
 	 */
 	public function get_options() {
 
 		$this->options = get_option( $this->plugin_slug );
 
-		if ( empty( $this->options ) )
+		if ( empty( $this->options ) ) {
 			$this->options = array(
 				'trash_attachments' => 'off',
-				'delete_attachments' => 'off'
-				);
+				'delete_attachments' => 'off',
+			);
+		}
 
 		return $this->options;
 	}

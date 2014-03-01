@@ -123,11 +123,9 @@ class Completely_Delete {
 				}
 
 				restore_current_blog();
-
 			} else {
 				self::single_activate();
 			}
-
 		} else {
 			self::single_activate();
 		}
@@ -157,15 +155,12 @@ class Completely_Delete {
 
 					switch_to_blog( $blog_id );
 					self::single_deactivate();
-
 				}
 
 				restore_current_blog();
-
 			} else {
 				self::single_deactivate();
 			}
-
 		} else {
 			self::single_deactivate();
 		}
@@ -180,7 +175,7 @@ class Completely_Delete {
 	 *
 	 * @since    0.1
 	 *
-	 * @return   array|false    The blog ids, false if no matches.
+	 * @return   array<int>|false    The blog ids, false if no matches.
 	 */
 	private static function get_blog_ids() {
 
@@ -202,7 +197,7 @@ class Completely_Delete {
 	 */
 	private static function single_activate() {
 
-		if( false == get_option( 'cd-display-activation-message' ) ) {
+		if ( false == get_option( 'cd-display-activation-message' ) ) {
 			add_option( 'cd-display-activation-message', true );
 		}
 	}
@@ -222,13 +217,13 @@ class Completely_Delete {
 
 		$screen = get_current_screen();
 
-		if( true == get_option( 'cd-display-activation-message' ) && 'plugins' == $screen->id ) {
+		if ( true == get_option( 'cd-display-activation-message' ) && 'plugins' == $screen->id ) {
 			$plugin = self::get_instance();
 
-			$html = '<div class="updated">';
-				$html .= '<p>';
-					$html .= sprintf( __( '<strong>Trash / delete a post with all its attachments is enabled.</strong> Disable these options in the <strong><a href="%s">Settings</a></strong> page.', $plugin->get_plugin_slug() ), admin_url( 'options-general.php?page=' . $plugin->get_plugin_slug() ) );
-				$html .= '</p>';
+			$html  = '<div class="updated">';
+			$html .= '<p>';
+				$html .= sprintf( __( '<strong>Trash / delete a post with all its attachments is enabled.</strong> Disable these options in the <strong><a href="%s">Settings</a></strong> page.', $plugin->get_plugin_slug() ), admin_url( 'options-general.php?page=' . $plugin->get_plugin_slug() ) );
+			$html .= '</p>';
 			$html .= '</div><!-- /.updated -->';
 
 			echo $html;
