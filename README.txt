@@ -4,8 +4,8 @@ Contributors: 1fixdotio, yoren
 Donate link: http://1fix.io/
 Tags: posts, pages, attachemnts
 Requires at least: 3.5
-Tested up to: 3.8.1
-Stable tag: 0.8.0
+Tested up to: 3.9
+Stable tag: 0.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,9 @@ This plugin is made for:
 3. A settings page for this plugin
 
 == Changelog ==
+
+= 0.8.1 =
+* Display Completely Delete link only when the user with the delete post capability.
 
 = 0.8.0 =
 * Use 3-digit version number.

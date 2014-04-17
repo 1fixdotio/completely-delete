@@ -14,7 +14,7 @@
  * Plugin Name:       Completely Delete
  * Plugin URI:        http://1fix.io/completely-delete
  * Description:       A plugin to let you completely delete all related objects of a post.
- * Version:           0.8.0
+ * Version:           0.8.1
  * Author:            1fixdotio
  * Author URI:        http://1fix.io
  * Text Domain:       completely-delete

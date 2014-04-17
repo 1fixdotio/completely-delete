@@ -232,8 +232,9 @@ class Completely_Delete_Admin {
 	public function add_delete_button() {
 
 		global $post;
+		$post_type_object = get_post_type_object( $post->post_type );
 
-		if ( isset( $_GET['post'] ) ) {
+		if ( isset( $_GET['post'] ) && current_user_can( $post_type_object->cap->delete_post, $post->ID ) ) {
 			?>
 				<div id="cd-action">
 					<a class="submitcd delete" href="<?php echo $this->get_action_url( $_GET['post'] ); ?>"><?php _e( 'Completely Delete', $this->plugin_slug ); ?>
@@ -380,7 +381,9 @@ class Completely_Delete_Admin {
 	 */
 	public function row_actions( $actions, $post ) {
 
-		if ( 'trash' != $post->post_status ) {
+		$post_type_object = get_post_type_object( $post->post_type );
+
+		if ( 'trash' != $post->post_status && current_user_can( $post_type_object->cap->delete_post, $post->ID ) ) {
 			$actions[$this->plugin_slug] = '<a class="submitcd delete" href="' . $this->get_action_url( $post->ID ) . '">' . __( 'Completely Delete', $this->plugin_slug ) . '</a>';
 		}
 
