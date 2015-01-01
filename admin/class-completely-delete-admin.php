@@ -322,10 +322,12 @@ class Completely_Delete_Admin {
 
 		// Get any related nav items, then delete them
 		$items = $this->get_menu_items_by_post_id( $post_id );
-		foreach ( $items as $item ) {
-			$post = get_post( $item->post_id );
-			if ( 'trash' == $post->post_status )
-				wp_delete_post( $item->post_id, true );
+		if ( $items ) {
+			foreach ( $items as $item ) {
+				$post = get_post( $item->post_id );
+				if ( 'trash' == $post->post_status )
+					wp_delete_post( $item->post_id, true );
+			}
 		}
 
 		$children_query = $wpdb->prepare( "SELECT ID, post_status FROM $wpdb->posts WHERE post_parent = %d", $post_id );
@@ -352,10 +354,12 @@ class Completely_Delete_Admin {
 
 		// Get any related nav items, then untrash them
 		$items = $this->get_menu_items_by_post_id( $post_id );
-		foreach ( $items as $item ) {
-			$post = get_post( $item->post_id );
-			if ( 'trash' == $post->post_status )
-				wp_untrash_post( $item->post_id );
+		if ( $items ) {
+			foreach ( $items as $item ) {
+				$post = get_post( $item->post_id );
+				if ( 'trash' == $post->post_status )
+					wp_untrash_post( $item->post_id );
+			}
 		}
 
 		// Point children of this page to its parent, also clean the cache of affected children
