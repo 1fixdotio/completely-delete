@@ -1,3 +1,0 @@
-[submodule "admin/includes/wordpress-settings-api-class"]
-	path = admin/includes/wordpress-settings-api-class
-	url = https://github.com/yoren/wordpress-settings-api-class.git

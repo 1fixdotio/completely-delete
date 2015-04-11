@@ -5,7 +5,7 @@ Donate link: http://1fix.io/
 Tags: posts, pages, attachemnts
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 0.8.2
+Stable tag: 0.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,9 @@ This plugin is made for:
 3. A settings page for this plugin
 
 == Changelog ==
+
+= 0.8.3 =
+* Fix minor bugs when trash/untrash posts.
 
 = 0.8.2 =
 * Fix a minor bug when untrash posts.

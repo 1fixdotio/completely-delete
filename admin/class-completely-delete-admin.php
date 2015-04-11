@@ -287,11 +287,12 @@ class Completely_Delete_Admin {
 
 		// Get any related nav items, then trash them
 		$items = $this->get_menu_items_by_post_id( $post_id );
-		// var_dump($items);exit();
-		foreach ( $items as $item ) {
-			$post = get_post( $item->post_id );
-			if ( 'trash' != $post->post_status )
-				wp_trash_post( $item->post_id );
+		if ( $items ) {
+			foreach ( $items as $item ) {
+				$post = get_post( $item->post_id );
+				if ( 'trash' != $post->post_status )
+					wp_trash_post( $item->post_id );
+			}
 		}
 
 		// Point children of this page to its parent, also clean the cache of affected children
@@ -302,9 +303,11 @@ class Completely_Delete_Admin {
 		$children_query = $wpdb->prepare( $sql, $post_id );
 		$children = $wpdb->get_results( $children_query );
 
-		foreach ( $children as $child ) {
-			if ( 'trash' != $child->post_status )
-				wp_trash_post( $child->ID );
+		if ( $children ) {
+			foreach ( $children as $child ) {
+				if ( 'trash' != $child->post_status )
+					wp_trash_post( $child->ID );
+			}
 		}
 	}
 
@@ -333,9 +336,11 @@ class Completely_Delete_Admin {
 		$children_query = $wpdb->prepare( "SELECT ID, post_status FROM $wpdb->posts WHERE post_parent = %d", $post_id );
 		$children = $wpdb->get_results( $children_query );
 
-		foreach ( $children as $child ) {
-			if ( 'trash' == $child->post_status )
-				wp_delete_post( $child->ID, true );
+		if ( $children ) {
+			foreach ( $children as $child ) {
+				if ( 'trash' == $child->post_status )
+					wp_delete_post( $child->ID, true );
+			}
 		}
 	}
 
@@ -370,9 +375,11 @@ class Completely_Delete_Admin {
 		$children_query = $wpdb->prepare( $sql, $post_id );
 		$children = $wpdb->get_results( $children_query );
 
-		foreach ( $children as $child ) {
-			if ( 'trash' == $child->post_status )
-				wp_untrash_post( $child->ID );
+		if ( $children ) {
+			foreach ( $children as $child ) {
+				if ( 'trash' == $child->post_status )
+					wp_untrash_post( $child->ID );
+			}
 		}
 	}
 
